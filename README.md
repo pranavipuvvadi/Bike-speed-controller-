@@ -1,1 +1,1 @@
-# Bike-speed-controller-
+To design a smart electric bike speed control system using a microcontroller and a throttle input that can be remotely controlled via mobile app and can provide real time feedback to the rider. The throttle input will be implemented using a potentiometer. The speed control Algorithm will be programmed in microcontroller based on the throttle input. The microcontroller will control the motor by sending PWM signal, for which the duty cycle will be adjusted based on input of PID controller.
