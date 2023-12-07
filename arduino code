@@ -1,0 +1,92 @@
+// built in arduino library<br>
+#include <LiquidCrystal.h>
+#include <HCSR04.h>
+LiquidCrystal lcd(12,11,5,4,3,2);
+const int BuzzerPin=1;
+int buttonApin = 13;
+const int trigPin = 7;
+const int echoPin = 6;
+int pwmPin = 10; // assigns pin 12 to variable pwm
+int pot = A0; // assigns analog input A0 to variable pot
+int c1 = 8;   // declares variable c1
+int c2 = 9;   // declares variable c2
+int speed1;
+int speed2;
+UltraSonicDistanceSensor distanceSensor(trigPin, echoPin);
+void setup() {
+  pinMode(pwmPin, OUTPUT); 
+  pinMode(pot, INPUT); 
+  pinMode(buttonApin, INPUT_PULLUP);
+  pinMode(BuzzerPin,OUTPUT);
+  lcd.begin(16, 2);
+  lcd.clear();
+  lcd.print("Start");
+  Serial.begin(9600);
+  Serial.println("Started");
+}
+void TurnMotorA(){ 
+speed1 = analogRead(A0);
+speed1 = speed1*0.2492668622;   
+ analogWrite(pwmPin,speed1);  
+ //delay(100);
+}
+void TurnMotorB(){ 
+speed1 = analogRead(A0);
+speed1 = speed1*0.2492668622;
+if (255-speed1>170)
+{
+speed2=170;  
+analogWrite(pwmPin,speed2);
+}
+}
+
+void displayLCD_A(){
+  lcd.begin(16, 2);
+  lcd.clear();
+  lcd.setCursor(0,1);
+  lcd.print ("Speed is:");
+  c2= analogRead(pot); 
+  int speed = c2*0.2492668622;
+  Serial.println(255-speed);
+  char myStg[10];
+  sprintf(myStg, "%d", 255-speed);
+  for(int i=0; i<strlen(myStg); i++)
+  {
+    lcd.print(myStg[i]);
+    //Serial.println(myStg[i]);  
+  }
+  lcd.setCursor (13,1);
+  lcd.print ("RPM");
+  delay(100);  
+}
+
+void displayLCD_B(){
+  lcd.begin(16, 2);
+  lcd.clear();
+  lcd.setCursor(0,1);
+  lcd.print ("Speed is:");
+  c2= analogRead(pot); 
+  int speed = 170;
+  Serial.println(170);
+  char myStg[10];
+  sprintf(myStg, "%d", speed);
+  for(int i=0; i<strlen(myStg); i++)
+  {
+    lcd.print(myStg[i]);
+    //Serial.println(myStg[i]);  
+  }
+  lcd.setCursor (13,1);
+  lcd.print ("RPM");
+  delay(100);  
+}
+
+void loop() {
+  if (digitalRead(buttonApin) == LOW)
+  {
+    TurnMotorB();
+    displayLCD_B();
+  }else{
+    TurnMotorA();
+    displayLCD_A();
+  }
+}
